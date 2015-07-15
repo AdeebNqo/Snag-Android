@@ -9,4 +9,5 @@ public class Constants {
 	public static final String KEY_BODY = "body";
 	public static final String KEY_DATE = "date";
 
+	public static final String INTRO_SHOWN = "intro_shown";
 }

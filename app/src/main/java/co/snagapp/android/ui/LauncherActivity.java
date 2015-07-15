@@ -3,16 +3,23 @@ package co.snagapp.android.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.snagapp.android.Constants;
 import co.snagapp.android.R;
+import co.snagapp.android.settings.SettingsUtil;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 public class LauncherActivity extends FragmentActivity {
 	
@@ -24,9 +31,21 @@ public class LauncherActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager);
 
-        // Todo:
-        // Check preference here and decide if to show launch screen or home
-        
+        String introShown = SettingsUtil.getInstance(this).get(Constants.INTRO_SHOWN);
+        if (TextUtils.isEmpty(introShown)){
+            showIntro();
+        }else{
+            boolean hasIntroBeenShown = Boolean.parseBoolean(introShown);
+            if (hasIntroBeenShown){
+                startBtnClicked(new Button(this));
+            }else{
+                showIntro();
+            }
+        }
+
+    }
+
+    private void showIntro(){
         mPager = (ViewPager) findViewById(R.id.viewpager);
         mPagerAdapter = new LauncherPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
@@ -45,6 +64,8 @@ public class LauncherActivity extends FragmentActivity {
     	Intent i = new Intent(this, HomeActivity.class);
     	i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(i);
+
+        SettingsUtil.getInstance(this).save(Constants.INTRO_SHOWN, true);
     }
     
     private class LauncherPagerAdapter extends FragmentStatePagerAdapter {
