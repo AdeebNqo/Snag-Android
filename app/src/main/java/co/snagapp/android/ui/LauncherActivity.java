@@ -16,12 +16,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class LauncherActivity extends FragmentActivity {
+public class LauncherActivity extends AppCompatActivity {
 	
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;

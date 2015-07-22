@@ -10,4 +10,6 @@ public class Constants {
 	public static final String KEY_DATE = "date";
 
 	public static final String INTRO_SHOWN = "intro_shown";
+	public static final String CACHE_SPAM_DATA = "spam_data";
+    public static final String CACHE_COMMON_DATA = "common_words";
 }

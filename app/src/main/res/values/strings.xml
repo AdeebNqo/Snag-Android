@@ -14,6 +14,19 @@
     <string name="dot">.</string>
     <string name="launcher_text_a">Snag filters spam SMS by intelligently matching special words.</string>
     <string name="launcher_text_b">To make Snag better, when you get a message you would like to subsequently filter, simply add it to Snag with the + icon.</string>
-        
+    <string name="title_activity_spam_numbers">SpamNumbersActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string-array name="nav_list">
+        <item>text_string</item>
+    </string-array>
+    <string name="drawer_open_content_desc">Open</string>
+    <string name="drawer_close_content_desc">Closed</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
         
 </resources>
