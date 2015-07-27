@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "co.snagapp.android"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 22
     }
 
@@ -23,5 +23,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:22.2.0"
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
+    compile 'com.github.clans:fab:1.5.5'
     compile files('libs/sqliteassethelper-2.0.1.jar')
 }

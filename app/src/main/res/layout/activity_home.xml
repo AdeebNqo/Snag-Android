@@ -29,13 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/spam_numbers_list"
-                android:scrollbars="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
 
-            <android.support.design.widget.FloatingActionButton
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/spam_numbers_list"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+            <com.github.clans.fab.FloatingActionMenu
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
@@ -44,7 +46,23 @@
                 app:layout_anchor="@id/spam_numbers_list"
                 app:borderWidth="0dp"
                 app:layout_anchorGravity="bottom|right|end"
-                android:id="@+id/fab_add_number"/>
+                android:id="@+id/fab_add_number">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menu_add_manual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_cellphone_android_white_18dp"
+                    app:fab_size="mini"
+                    app:fab_label="Add number manually" />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menu_add_from_sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_message_text_outline_white_18dp"
+                    app:fab_size="mini"
+                    app:fab_label="Get number from sms" />
+            </com.github.clans.fab.FloatingActionMenu>
+
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>

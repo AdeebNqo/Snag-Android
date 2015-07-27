@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 
 import co.snagapp.android.R;
 
-public class PhoneInputScreen extends Fragment {
+public class PhoneInputScreen extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,6 +67,7 @@ public class PhoneInputScreen extends Fragment {
 
         eight = view.findViewById(R.id.eight);
         setButtonText(eight, 8, "TUV");
+        eight.setOnClickListener(this);
 
         nine = view.findViewById(R.id.nine);
         setButtonText(nine, 9, "WXYZ");
@@ -83,6 +85,8 @@ public class PhoneInputScreen extends Fragment {
 
 
         etNumberInput = (EditText) getView().findViewById(R.id.editText);
+        etNumberInput.setInputType(InputType.TYPE_NULL);
+
         fabAddNumber = (FloatingActionButton) getView().findViewById(R.id.fab_add_number);
         fabAddNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,4 +167,8 @@ public class PhoneInputScreen extends Fragment {
         void onInputGiven(String number);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

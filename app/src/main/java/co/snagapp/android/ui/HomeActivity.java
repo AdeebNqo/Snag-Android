@@ -6,7 +6,6 @@ import co.snagapp.android.SpamNumbersAdapter;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -20,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,8 +30,11 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
     DrawerLayout drawerLayout;
     ActionBar actionBar;
     Toolbar toolbar;
-    FloatingActionButton fab;
     ActionBarDrawerToggle drawerToggle;
+
+    FloatingActionMenu fabMenu;
+    private com.github.clans.fab.FloatingActionButton fabAddFromSms;
+    private com.github.clans.fab.FloatingActionButton fabAddManually;
 
     private RecyclerView spamNumbers;
     private LinearLayoutManager mLayoutManager;
@@ -47,7 +52,9 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
         spamNumbers = (RecyclerView) findViewById(R.id.spam_numbers_list);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab_add_number);
+        fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add_number);
+        fabAddFromSms = (FloatingActionButton) fabMenu.findViewById(R.id.menu_add_from_sms);
+        fabAddManually = (FloatingActionButton) fabMenu.findViewById(R.id.menu_add_manual);
 
         // action bar
         setSupportActionBar(toolbar);
@@ -70,10 +77,18 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
     }
 
     public void setupOnClickListeners(){
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabAddManually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "add new", Toast.LENGTH_SHORT).show();
+                Intent addnewnumber = new Intent(HomeActivity.this, AddNewSpamNumber.class);
+                startActivity(addnewnumber);
+            }
+        });
+
+        fabAddFromSms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(HomeActivity.this, "Hello", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -88,6 +103,16 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
     @Override
     public void onClick(SpamNumber spamNumber) {
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

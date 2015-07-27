@@ -5,18 +5,10 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
 
     <application
         android:name=".Snaggy"
@@ -48,6 +40,10 @@
         <activity
             android:name=".ui.SpamNumbersActivity"
             android:label="@string/title_activity_spam_numbers" >
+        </activity>
+        <activity
+            android:name=".ui.AddNewSpamNumber"
+            android:label="@string/title_activity_add_new_spam_number" >
         </activity>
     </application>
 
