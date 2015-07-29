@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="spacing_large">8dp</dimen>
+    <dimen name="card_top_half_fragment">0dp</dimen>
+    <dimen name="spacing_xsmall">0dp</dimen>
+</resources>

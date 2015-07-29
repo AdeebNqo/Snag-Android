@@ -1,12 +1,9 @@
 <resources>
-
     <string name="app_name">Snaggy</string>
-    
     <string name="action_new">New spam SMS</string>
     <string name="action_about">About</string>
     <string name="action_rate">Rate</string>
     <string name="action_feedback">Send feedback</string>
-        
     <string name="date">Date</string>
     <string name="from">From</string>
     <string name="message_body">Message body</string>
@@ -15,19 +12,23 @@
     <string name="launcher_text_a">Snag filters spam SMS by intelligently matching special words.</string>
     <string name="launcher_text_b">To make Snag better, when you get a message you would like to subsequently filter, simply add it to Snag with the + icon.</string>
     <string name="title_activity_spam_numbers">SpamNumbersActivity</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
-
     <string-array name="nav_list">
         <item>text_string</item>
     </string-array>
     <string name="drawer_open_content_desc">Open</string>
     <string name="drawer_close_content_desc">Closed</string>
-
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="number">Number</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_add_new_spam_number">AddNewSpamNumber</string>
-        
+    <string name="send_feedback">Send feedback...</string>
+    <string name="title_activity_about">About</string>
+    <string name="gravatar_url">http://www.news.az/photos/page-photo/58177.jpg</string>
+    <string name="conf_email">androidpot107@gmail.com</string>
+    <string name="conf_feedbacksubj">This is about Snaggy</string>
+    <string name="invalid_number">Invalid number</string>
+    <string name="number_from_sms">Get number from sms</string>
+    <string name="number_manually">Add number manually</string>
+    <string name="empty">No sms\'</string>
 </resources>

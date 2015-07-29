@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import co.snagapp.android.R;
@@ -33,6 +36,8 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
 
     private EditText etNumberInput;
     private FloatingActionButton fabAddNumber;
+    private TextInputLayout numberInputHint;
+    private ImageButton backspace;
 
     public static PhoneInputScreen newInstance() {
         PhoneInputScreen fragment = new PhoneInputScreen();
@@ -46,24 +51,31 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
     public void loadItemsFromView(View view){
         one = view.findViewById(R.id.one);
         setButtonText(one, 1, "");
+        one.setOnClickListener(this);
 
         two = view.findViewById(R.id.two);
         setButtonText(two, 2, "ABC");
+        two.setOnClickListener(this);
 
         three = view.findViewById(R.id.three);
         setButtonText(three, 3, "DEF");
+        three.setOnClickListener(this);
 
         four = view.findViewById(R.id.four);
         setButtonText(four, 4, "GHI");
+        four.setOnClickListener(this);
 
         five = view.findViewById(R.id.five);
         setButtonText(five, 5, "JKL");
+        five.setOnClickListener(this);
 
         six = view.findViewById(R.id.six);
         setButtonText(six, 6, "MNO");
+        six.setOnClickListener(this);
 
         seven = view.findViewById(R.id.seven);
         setButtonText(seven, 7, "PQRS");
+        seven.setOnClickListener(this);
 
         eight = view.findViewById(R.id.eight);
         setButtonText(eight, 8, "TUV");
@@ -71,6 +83,7 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
 
         nine = view.findViewById(R.id.nine);
         setButtonText(nine, 9, "WXYZ");
+        nine.setOnClickListener(this);
 
         star = view.findViewById(R.id.star);
         setButtonText(star, "", "*");
@@ -78,14 +91,22 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
 
         zero = view.findViewById(R.id.zero);
         setButtonText(zero, 0, "+");
+        zero.setOnClickListener(this);
 
         hash = view.findViewById(R.id.hash);
         setButtonText(hash, "", "#");
         hash.setVisibility(View.INVISIBLE);
 
+        backspace = (ImageButton) getView().findViewById(R.id.backspace_button);
+        numberInputHint = (TextInputLayout) getView().findViewById(R.id.number_input_hint);
 
         etNumberInput = (EditText) getView().findViewById(R.id.editText);
         etNumberInput.setInputType(InputType.TYPE_NULL);
+        etNumberInput.setOnClickListener(null);
+
+        backspace.setOnClickListener(this);
+
+        numberInputHint.setHint(getString(R.string.number));
 
         fabAddNumber = (FloatingActionButton) getView().findViewById(R.id.fab_add_number);
         fabAddNumber.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +130,9 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
             subTextView.setText(subText);
         }
     }
+    private boolean isPhoneNumberValid(String number){
+        return !TextUtils.isEmpty(number);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,20 +155,23 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
     public void onButtonPressed() {
         if (mListener != null) {
             String number = etNumberInput.getText().toString();
-            //todo: validate num perhaps?
-            mListener.onInputGiven(number);
+            if (isPhoneNumberValid(number)){
+                mListener.onInputGiven(number);
+            }else{
+                numberInputHint.setError(getString(R.string.invalid_number));
+            }
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        /*try {
+        try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -153,22 +180,30 @@ public class PhoneInputScreen extends Fragment implements View.OnClickListener{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         void onInputGiven(String number);
     }
 
     @Override
     public void onClick(View v) {
-
+        int id = v.getId();
+        switch(id){
+            case R.id.fab_add_number:{
+                onButtonPressed();
+                break;
+            }
+            case R.id.backspace_button:{
+                int length = etNumberInput.getText().length();
+                if (length > 0) {
+                    etNumberInput.getText().delete(length - 1, length);
+                }
+                break;
+            }
+            default:{
+                TextView tvNumber = (TextView) v.findViewById(R.id.mainText);
+                String enteredNumber = tvNumber.getText().toString();
+                etNumberInput.append(enteredNumber);
+            }
+        }
     }
 }

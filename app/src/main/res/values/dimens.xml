@@ -15,4 +15,5 @@
     <dimen name="fab_compat_margin">0dp</dimen>
 
     <dimen name="card_height">120dp</dimen>
+    <dimen name="card_top_half_fragment">200dp</dimen>
 </resources>

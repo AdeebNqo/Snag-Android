@@ -1,12 +1,17 @@
 package co.snagapp.android.ui;
 
+import co.snagapp.android.Emailer;
 import co.snagapp.android.R;
+import co.snagapp.android.Sms;
 import co.snagapp.android.SpamNumber;
 import co.snagapp.android.SpamNumbersAdapter;
+import co.snagapp.android.worker.Feedback;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -24,8 +29,9 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapter.SpamNumberDetailsItemOnClickListener {
+public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapter.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener {
 
     DrawerLayout drawerLayout;
     ActionBar actionBar;
@@ -39,9 +45,11 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
     private RecyclerView spamNumbers;
     private LinearLayoutManager mLayoutManager;
     private SpamNumbersAdapter mAdapter;
-    private Collection<SpamNumber> numbers = new ArrayList<>();
+    private List<Sms> numbers = new ArrayList<>();
 
-    NavigationView navView;
+    private NavigationView navView;
+    private Feedback feedback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,37 +81,92 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
         mAdapter = new SpamNumbersAdapter(numbers, this);
         spamNumbers.setAdapter(mAdapter);
 
+        //other items
+        feedback = new Emailer();
+
         setupOnClickListeners();
     }
 
     public void setupOnClickListeners(){
+
         fabAddManually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addnewnumber = new Intent(HomeActivity.this, AddNewSpamNumber.class);
-                startActivity(addnewnumber);
+
+                fabMenu.close(false);
+                fabMenu.hideMenuButton(false);
+
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                transaction.replace(R.id.manual_number_add_container, new PhoneInputScreen());
+                transaction.addToBackStack(PhoneInputScreen.class.getName());
+                transaction.commit();
             }
         });
 
         fabAddFromSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+
+                fabMenu.close(false);
+                fabMenu.hideMenuButton(false);
+
+                getFragmentManager().popBackStackImmediate();
+
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                transaction.replace(R.id.manual_number_add_container, new SMSListFragment());
+                transaction.addToBackStack(SMSListFragment.class.getName());
+                transaction.commit();
             }
         });
 
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                Toast.makeText(HomeActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawers();
+                switch (menuItem.getItemId()){
+                    case R.id.action_about:{
+                        Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.action_feedback:{
+                        feedback.sendFeedback(HomeActivity.this, getString(R.string.conf_email), getString(R.string.conf_feedbacksubj));
+                        break;
+                    }
+                }
                 return true;
             }
         });
     }
+
     @Override
-    public void onClick(SpamNumber spamNumber) {
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStack();
+            fabMenu.showMenuButton(false);
+        }else {
+            if (fabMenu.isOpened()){
+                fabMenu.close(true);
+            }else {
+                super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(Sms sms) {
 
     }
+
+    @Override
+    public void onInputGiven(String number) {
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns

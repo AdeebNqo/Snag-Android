@@ -9,6 +9,7 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Snaggy"
@@ -44,6 +45,10 @@
         <activity
             android:name=".ui.AddNewSpamNumber"
             android:label="@string/title_activity_add_new_spam_number" >
+        </activity>
+        <activity
+            android:name=".ui.AboutActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 
