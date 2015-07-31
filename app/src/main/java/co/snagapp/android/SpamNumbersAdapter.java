@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.Collection;
 import java.util.List;
-
 import me.grantland.widget.AutofitTextView;
 
 /**
@@ -43,7 +40,7 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
 
     @Override
     public int getItemCount() {
-        return 0;
+        return smsList.size();
     }
 
     public interface SpamNumberDetailsItemOnClickListener{
@@ -60,4 +57,6 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
             body = (AutofitTextView) v.findViewById(R.id.textView5);
         }
     }
+
+
 }

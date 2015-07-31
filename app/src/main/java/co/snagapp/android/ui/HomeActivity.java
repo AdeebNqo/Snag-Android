@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
 
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_in_bottom, R.anim.slide_out_top);
                 transaction.replace(R.id.manual_number_add_container, new PhoneInputScreen());
                 transaction.addToBackStack(PhoneInputScreen.class.getName());
                 transaction.commit();
@@ -116,7 +116,7 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
 
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_out_top);
                 transaction.replace(R.id.manual_number_add_container, new SMSListFragment());
                 transaction.addToBackStack(SMSListFragment.class.getName());
                 transaction.commit();
@@ -159,12 +159,14 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
 
     @Override
     public void onClick(Sms sms) {
-
+        //add sms
+        onBackPressed();
     }
 
     @Override
     public void onInputGiven(String number) {
-
+        //add number
+        onBackPressed();
     }
 
     @Override

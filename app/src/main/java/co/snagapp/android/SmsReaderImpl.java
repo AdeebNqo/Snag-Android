@@ -13,8 +13,6 @@ public class SmsReaderImpl implements SmsReader {
     @Override
     public List<Sms> getAllSms(Context context) {
         List<Sms> lstSms = new ArrayList<Sms>();
-        /*Uri message = Uri.parse("content://sms/");
-        ContentResolver cr = context.getContentResolver();*/
         Sms dummySms = new Sms();
         dummySms.setFolderName("inbox"); dummySms.setId("0719396470"); dummySms.setReadState("1"); dummySms.setTime("Tues.");
         lstSms.add(dummySms);
