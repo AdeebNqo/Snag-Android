@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapter.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener{
 
     DrawerLayout drawerLayout;
     ActionBar actionBar;
@@ -158,14 +159,21 @@ public class HomeActivity extends AppCompatActivity implements SpamNumbersAdapte
     }
 
     @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
     public void onClick(Sms sms) {
         //add sms
+        Log.d("foobar", sms.getId());
         onBackPressed();
     }
 
     @Override
     public void onInputGiven(String number) {
         //add number
+        Log.d("foobar", number);
         onBackPressed();
     }
 

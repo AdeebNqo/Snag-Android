@@ -2,26 +2,22 @@ package co.snagapp.android.ui;
 
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
-
 import co.snagapp.android.R;
 import co.snagapp.android.Sms;
 import co.snagapp.android.SmsReaderImpl;
 import co.snagapp.android.SpamNumbersAdapter;
 import co.snagapp.android.worker.SmsReader;
 
-public class SMSListFragment extends Fragment {
+public class SMSListFragment extends Fragment implements View.OnClickListener {
 
     private SmsReader smsReader;
     private List<Sms> smses;
@@ -29,7 +25,7 @@ public class SMSListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SpamNumbersAdapter.SpamNumberDetailsItemOnClickListener mListener;
+    private SpamNumberDetailsItemOnClickListener mListener;
 
     private TextView emptyStatusText;
 
@@ -46,11 +42,13 @@ public class SMSListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_smslist, container, false);
     }
 
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (SpamNumbersAdapter.SpamNumberDetailsItemOnClickListener) activity;
+            mListener = (SpamNumberDetailsItemOnClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -70,7 +68,7 @@ public class SMSListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new SpamNumbersAdapter(smses, mListener);
+        mAdapter = new SpamNumbersAdapter(smses, this);
         mRecyclerView.setAdapter(mAdapter);
 
         if (smses.isEmpty()){
@@ -78,5 +76,15 @@ public class SMSListFragment extends Fragment {
         }else{
             emptyStatusText.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int itemPosition = mRecyclerView.getChildLayoutPosition(v);
+        mListener.onClick(smses.get(itemPosition));
+    }
+
+    public interface SpamNumberDetailsItemOnClickListener{
+        void onClick(Sms sms);
     }
 }

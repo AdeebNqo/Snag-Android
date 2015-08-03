@@ -14,9 +14,9 @@ import me.grantland.widget.AutofitTextView;
 public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.ViewHolder>{
 
     private List<Sms> smsList;
-    private SpamNumberDetailsItemOnClickListener spamNumberDetailsItemOnClickListener;
+    private View.OnClickListener spamNumberDetailsItemOnClickListener;
 
-    public SpamNumbersAdapter(List<Sms> smses, SpamNumberDetailsItemOnClickListener spamNumberDetailsItemOnClickListener) {
+    public SpamNumbersAdapter(List<Sms> smses, View.OnClickListener spamNumberDetailsItemOnClickListener) {
         this.smsList = smses;
         this.spamNumberDetailsItemOnClickListener = spamNumberDetailsItemOnClickListener;
     }
@@ -26,6 +26,7 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sms_list_item, parent, false);
+        v.setOnClickListener(spamNumberDetailsItemOnClickListener);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -41,10 +42,6 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
     @Override
     public int getItemCount() {
         return smsList.size();
-    }
-
-    public interface SpamNumberDetailsItemOnClickListener{
-        void onClick(Sms sms);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
