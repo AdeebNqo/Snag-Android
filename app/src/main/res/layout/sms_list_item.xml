@@ -12,7 +12,9 @@
         android:text="Large Text"
         android:id="@+id/textView4"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-thin"
+        android:textStyle="bold"/>
 
     <me.grantland.widget.AutofitTextView
         android:layout_width="match_parent"
@@ -23,14 +25,17 @@
         android:id="@+id/textView5"
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@android:color/black"
-        android:layout_marginTop="41dp" />
+        android:background="@color/divider"
+        android:layout_marginTop="41dp"
+        android:layout_marginLeft="@dimen/spacing_medium"
+        android:layout_marginRight="@dimen/spacing_medium"/>
 </RelativeLayout>

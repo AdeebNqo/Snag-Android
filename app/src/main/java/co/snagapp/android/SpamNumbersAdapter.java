@@ -55,5 +55,4 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
         }
     }
 
-
 }

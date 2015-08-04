@@ -2,17 +2,21 @@ package co.snagapp.android.ui;
 
 import co.snagapp.android.Emailer;
 import co.snagapp.android.R;
+import co.snagapp.android.SharedPrerefencesPersister;
 import co.snagapp.android.Sms;
-import co.snagapp.android.SpamNumber;
 import co.snagapp.android.SpamNumbersAdapter;
+import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
-
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,26 +24,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener{
+public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
 
-    DrawerLayout drawerLayout;
-    ActionBar actionBar;
-    Toolbar toolbar;
-    ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    private ActionBar actionBar;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle drawerToggle;
 
-    FloatingActionMenu fabMenu;
+    private FloatingActionMenu fabMenu;
     private com.github.clans.fab.FloatingActionButton fabAddFromSms;
     private com.github.clans.fab.FloatingActionButton fabAddManually;
 
@@ -50,6 +53,7 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
 
     private NavigationView navView;
     private Feedback feedback;
+    private DataPersister dataPersister;
 
 
     @Override
@@ -84,8 +88,26 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
 
         //other items
         feedback = new Emailer();
+        dataPersister = new SharedPrerefencesPersister(this, this);
 
+        loadSavedData();
         setupOnClickListeners();
+    }
+
+    private void loadSavedData(){
+        Collection<String> blockedNumbers = dataPersister.getAllBlockedNumbers();
+        Iterator<String> numIterator = blockedNumbers.iterator();
+        while(numIterator.hasNext()){
+            Sms sms = new Sms();
+            sms.setId(numIterator.next());
+            numbers.add(sms);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemAdded() {
+        mAdapter.notifyDataSetChanged();
     }
 
     public void setupOnClickListeners(){
@@ -93,34 +115,14 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         fabAddManually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                fabMenu.close(false);
-                fabMenu.hideMenuButton(false);
-
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_in_bottom, R.anim.slide_out_top);
-                transaction.replace(R.id.manual_number_add_container, new PhoneInputScreen());
-                transaction.addToBackStack(PhoneInputScreen.class.getName());
-                transaction.commit();
+                showFragment(new PhoneInputScreen());
             }
         });
 
         fabAddFromSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                fabMenu.close(false);
-                fabMenu.hideMenuButton(false);
-
-                getFragmentManager().popBackStackImmediate();
-
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_out_top);
-                transaction.replace(R.id.manual_number_add_container, new SMSListFragment());
-                transaction.addToBackStack(SMSListFragment.class.getName());
-                transaction.commit();
+                showFragment(new SMSListFragment());
             }
         });
 
@@ -128,13 +130,13 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 drawerLayout.closeDrawers();
-                switch (menuItem.getItemId()){
-                    case R.id.action_about:{
+                switch (menuItem.getItemId()) {
+                    case R.id.action_about: {
                         Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
                         startActivity(intent);
                         break;
                     }
-                    case R.id.action_feedback:{
+                    case R.id.action_feedback: {
                         feedback.sendFeedback(HomeActivity.this, getString(R.string.conf_email), getString(R.string.conf_feedbacksubj));
                         break;
                     }
@@ -144,11 +146,33 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         });
     }
 
+    private void showFragment(Fragment someFragment){
+
+        fabMenu.close(false);
+        fabMenu.hideMenuButton(false);
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_out_top);
+        transaction.replace(R.id.manual_number_add_container, someFragment);
+        transaction.addToBackStack(someFragment.getClass().getName());
+        transaction.commit();
+    }
+
+    private boolean isFloatingFragmentVisible(){
+        boolean isVisible = getSupportFragmentManager().getBackStackEntryCount() > 0;
+        return  isVisible;
+    }
+
+    private void closeFloatingFragment(){
+        getSupportFragmentManager().popBackStack();
+        fabMenu.showMenuButton(false);
+    }
+
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0){
-            getSupportFragmentManager().popBackStack();
-            fabMenu.showMenuButton(false);
+        if (isFloatingFragmentVisible()){
+            closeFloatingFragment();
         }else {
             if (fabMenu.isOpened()){
                 fabMenu.close(true);
@@ -166,19 +190,26 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     @Override
     public void onClick(Sms sms) {
         //add sms
-        Log.d("foobar", sms.getId());
+        dataPersister.addNumberToBlockedNumbers(sms.getId());
+        numbers.add(sms);
         onBackPressed();
     }
 
     @Override
     public void onInputGiven(String number) {
         //add number
-        Log.d("foobar", number);
+        dataPersister.addNumberToBlockedNumbers(number);
+        Sms sms = new Sms();
+        sms.setId(number);
+        numbers.add(sms);
         onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (isFloatingFragmentVisible())
+            closeFloatingFragment();
+
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         if (drawerToggle.onOptionsItemSelected(item)) {

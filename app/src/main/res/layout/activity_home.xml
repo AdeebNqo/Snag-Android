@@ -18,7 +18,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/screen_filler">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -85,12 +86,13 @@
     </android.support.v4.widget.DrawerLayout>
 
 
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/manual_number_add_container"
+        android:orientation="horizontal"
         android:layout_marginTop="@dimen/card_top_half_fragment"
-        android:elevation="@dimen/spacing_medium"
-        android:orientation="horizontal" />
+        android:elevation="@dimen/spacing_medium"/>
 
 </FrameLayout>
