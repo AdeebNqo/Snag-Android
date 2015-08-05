@@ -44,4 +44,14 @@ public class SharedPrerefencesPersister implements DataPersister {
         dataPersistenceEventListener.onItemAdded();
     }
 
+    @Override
+    public void removeNumberFromBlockedNumbers(String number) {
+        sharedPreferences.edit().remove(number).commit();
+        dataPersistenceEventListener.onItemRemoved();
+    }
+
+    @Override
+    public boolean isNumberBlocked(String number) {
+        return sharedPreferences.contains(number);
+    }
 }

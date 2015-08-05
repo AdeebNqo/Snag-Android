@@ -13,9 +13,7 @@ public class SmsListener extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-    	Log.e("DEBUG", "New SMS");
         if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-        	Log.e("DEBUG", "Correct Intent");
             Bundle bundle = intent.getExtras();
             SmsMessage [] msgs = null;
             String msgFrom;

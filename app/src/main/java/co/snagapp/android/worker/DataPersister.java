@@ -8,8 +8,11 @@ import java.util.Collection;
 public interface DataPersister {
     Collection<String> getAllBlockedNumbers();
     void addNumberToBlockedNumbers(String number);
+    void removeNumberFromBlockedNumbers(String number);
+    boolean isNumberBlocked(String number);
 
     interface DataPersistenceEventListener{
         void onItemAdded();
+        void onItemRemoved();
     }
 }

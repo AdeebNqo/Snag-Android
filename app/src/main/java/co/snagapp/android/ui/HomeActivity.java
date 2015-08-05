@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +51,7 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     private LinearLayoutManager mLayoutManager;
     private SpamNumbersAdapter mAdapter;
     private List<Sms> numbers = new ArrayList<>();
+    ItemTouchHelper.SimpleCallback listItemSwipeListener;
 
     private NavigationView navView;
     private Feedback feedback;
@@ -85,6 +87,41 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         spamNumbers.setLayoutManager(mLayoutManager);
         mAdapter = new SpamNumbersAdapter(numbers, this);
         spamNumbers.setAdapter(mAdapter);
+        listItemSwipeListener = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return true;
+            }
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return true;
+            }
+
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                mAdapter.swapItems(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                Toast.makeText(HomeActivity.this, getString(R.string.removed), Toast.LENGTH_SHORT).show();
+                int position = viewHolder.getAdapterPosition();
+                dataPersister.removeNumberFromBlockedNumbers(numbers.get(position).getId());
+                numbers.remove(position);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
+        itemTouchHelper.attachToRecyclerView(spamNumbers);
 
         //other items
         feedback = new Emailer();
@@ -107,6 +144,11 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
 
     @Override
     public void onItemAdded() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemRemoved() {
         mAdapter.notifyDataSetChanged();
     }
 

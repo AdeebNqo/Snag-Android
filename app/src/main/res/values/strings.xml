@@ -31,4 +31,5 @@
     <string name="number_from_sms">Get number from sms</string>
     <string name="number_manually">Add number manually</string>
     <string name="empty">No smses.</string>
+    <string name="removed">Removed</string>
 </resources>
