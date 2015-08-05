@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
 
     private DrawerLayout drawerLayout;
@@ -50,7 +52,10 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     ItemTouchHelper.SimpleCallback listItemSwipeListener;
 
     private NavigationView navView;
+
+    @Inject
     private Feedback feedback;
+    @Inject
     private DataPersister dataPersister;
 
 
@@ -118,10 +123,6 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
         itemTouchHelper.attachToRecyclerView(spamNumbers);
-
-        //other items
-        feedback = new Emailer();
-        dataPersister = new SharedPrerefencesPersister(this, this);
 
         loadSavedData();
         setupOnClickListeners();

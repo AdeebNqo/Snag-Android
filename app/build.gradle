@@ -29,4 +29,6 @@ dependencies {
     compile 'org.sufficientlysecure:html-textview:1.2'
     compile 'me.grantland:autofittextview:0.2.+'
     compile files('libs/sqliteassethelper-2.0.1.jar')
+    compile 'org.roboguice:roboguice:3.+'
+    provided 'org.roboguice:roboblender:3.+'
 }
