@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.worker.impl;
 
 
 import java.io.BufferedReader;

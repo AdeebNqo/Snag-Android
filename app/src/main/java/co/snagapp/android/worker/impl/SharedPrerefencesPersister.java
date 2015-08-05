@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.worker.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.UUID;
 
 import co.snagapp.android.worker.DataPersister;
 

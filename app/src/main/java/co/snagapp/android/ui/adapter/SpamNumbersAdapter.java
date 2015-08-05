@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
+
+import co.snagapp.android.R;
+import co.snagapp.android.model.Sms;
 import me.grantland.widget.AutofitTextView;
 
 /**

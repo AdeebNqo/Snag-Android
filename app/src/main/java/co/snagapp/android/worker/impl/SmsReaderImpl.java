@@ -1,9 +1,10 @@
-package co.snagapp.android;
+package co.snagapp.android.worker.impl;
 
 import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.snagapp.android.model.Sms;
 import co.snagapp.android.worker.SmsReader;
 
 /**

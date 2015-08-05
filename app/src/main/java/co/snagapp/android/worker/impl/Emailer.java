@@ -1,9 +1,10 @@
-package co.snagapp.android;
+package co.snagapp.android.worker.impl;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import co.snagapp.android.R;
 import co.snagapp.android.worker.Feedback;
 
 public class Emailer implements Feedback {

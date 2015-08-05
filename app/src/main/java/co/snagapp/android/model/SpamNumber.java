@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.model;
 
 import android.os.Bundle;
 import android.os.Message;
