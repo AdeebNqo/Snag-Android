@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
-import me.grantland.widget.AutofitTextView;
-
 /**
  * Created by zola on 2015/07/20.
  */
@@ -54,11 +52,11 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView number;
-        public AutofitTextView body;
+        public TextView body;
         public ViewHolder(View v) {
             super(v);
             number = (TextView) v.findViewById(R.id.textView4);
-            body = (AutofitTextView) v.findViewById(R.id.textView5);
+            body = (TextView) v.findViewById(R.id.textView5);
         }
     }
 
