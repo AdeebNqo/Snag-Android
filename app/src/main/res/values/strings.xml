@@ -24,7 +24,7 @@
     <string name="title_activity_add_new_spam_number">AddNewSpamNumber</string>
     <string name="send_feedback">Send feedback...</string>
     <string name="title_activity_about">About</string>
-    <string name="gravatar_url">http://i-cdn.phonearena.com/images/articles/148054-thumb/material-design-banner.jpg</string>
+    <string name="gravatar_url">http://www.gravatar.com/avatar/1398c50ad82b6853c0db90c423697841?s=200</string>
     <string name="conf_email">androidpot107@gmail.com</string>
     <string name="conf_feedbacksubj">This is about Snaggy</string>
     <string name="invalid_number">Invalid number</string>
