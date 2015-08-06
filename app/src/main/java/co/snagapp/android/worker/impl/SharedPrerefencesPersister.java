@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import co.snagapp.android.worker.DataPersister;
 
 /**

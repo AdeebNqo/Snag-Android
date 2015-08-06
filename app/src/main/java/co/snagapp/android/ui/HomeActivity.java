@@ -1,12 +1,14 @@
 package co.snagapp.android.ui;
 
-import co.snagapp.android.worker.impl.Emailer;
 import co.snagapp.android.R;
-import co.snagapp.android.worker.impl.SharedPrerefencesPersister;
 import co.snagapp.android.model.Sms;
 import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
+import roboguice.RoboGuice;
+import roboguice.activity.RoboActionBarActivity;
+import roboguice.activity.RoboActivity;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -31,10 +33,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
+public class HomeActivity extends RoboActionBarActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
 
     private DrawerLayout drawerLayout;
     private ActionBar actionBar;
