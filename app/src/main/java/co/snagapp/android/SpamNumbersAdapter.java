@@ -1,6 +1,7 @@
 package co.snagapp.android;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,11 @@ public class SpamNumbersAdapter extends RecyclerView.Adapter<SpamNumbersAdapter.
 
         holder.number.setText(sms.getId());
         holder.body.setText(sms.getMsg());
+        if (TextUtils.isEmpty(sms.getMsg())){
+            holder.body.setVisibility(View.GONE);
+        }else{
+            holder.body.setVisibility(View.VISIBLE);
+        }
     }
 
     public void swapItems(int from, int to){

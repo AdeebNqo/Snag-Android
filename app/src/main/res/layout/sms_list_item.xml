@@ -11,11 +11,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="Large Text"
         android:id="@+id/textView4"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-thin"
-        android:layout_marginBottom="@dimen/spacing_xlarge"
-        android:textStyle="bold"/>
+        android:fontFamily="sans-serif-bold"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/spacing_xlarge"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_below="@+id/textView4"
         android:layout_alignLeft="@+id/view2"
         android:layout_alignStart="@+id/view2"
-        android:paddingTop="@dimen/spacing_xlarge"
+        android:paddingTop="@dimen/spacing_large"
         android:paddingLeft="@dimen/spacing_medium"
         android:paddingRight="@dimen/spacing_medium"
         android:maxLines = "3"
