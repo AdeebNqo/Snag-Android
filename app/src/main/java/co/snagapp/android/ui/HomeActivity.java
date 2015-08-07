@@ -9,6 +9,7 @@ import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.opengl.Visibility;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.NavigationView;
@@ -25,9 +26,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -57,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     private Feedback feedback;
     private DataPersister dataPersister;
 
+    private LinearLayout emptyStateView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add_number);
         fabAddFromSms = (FloatingActionButton) fabMenu.findViewById(R.id.menu_add_from_sms);
         fabAddManually = (FloatingActionButton) fabMenu.findViewById(R.id.menu_add_manual);
+        emptyStateView = (LinearLayout) findViewById(R.id.empty_state);
 
         // action bar
         setSupportActionBar(toolbar);
@@ -140,16 +145,32 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
             numbers.add(sms);
         }
         mAdapter.notifyDataSetChanged();
+
+        renderEmptyStateIfNeccessary();
     }
 
     @Override
     public void onItemAdded() {
         mAdapter.notifyDataSetChanged();
+
+        renderEmptyStateIfNeccessary();
     }
 
     @Override
     public void onItemRemoved() {
         mAdapter.notifyDataSetChanged();
+
+        renderEmptyStateIfNeccessary();
+    }
+
+    public void renderEmptyStateIfNeccessary(){
+        if (!numbers.isEmpty()){
+            emptyStateView.setVisibility(View.INVISIBLE);
+            spamNumbers.setVisibility(View.VISIBLE);
+        }else{
+            emptyStateView.setVisibility(View.VISIBLE);
+            spamNumbers.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setupOnClickListeners(){
@@ -216,7 +237,9 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         if (isFloatingFragmentVisible()){
             closeFloatingFragment();
         }else {
-            if (fabMenu.isOpened()){
+            if (drawerLayout.isDrawerOpen(navView)){
+                drawerLayout.closeDrawers();
+            }else if (fabMenu.isOpened()){
                 fabMenu.close(true);
             }else {
                 super.onBackPressed();

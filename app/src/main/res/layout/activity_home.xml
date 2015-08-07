@@ -37,11 +37,41 @@
                 android:layout_height="match_parent">
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/spam_numbers_list"
-                    android:scrollbars="vertical"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/spam_numbers_list"
+                        android:scrollbars="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:id="@+id/empty_state"
+                        android:visibility="gone"
+                        android:animateLayoutChanges="true"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_account_alert_grey600_48dp"
+                            android:id="@+id/imageView" />
+
+                        <TextView
+                            android:paddingTop="@dimen/spacing_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/empty_numbers"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
 
                 <com.github.clans.fab.FloatingActionMenu
@@ -93,6 +123,8 @@
         android:id="@+id/manual_number_add_container"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/card_top_half_fragment"
-        android:elevation="@dimen/spacing_medium"/>
+        android:elevation="@dimen/spacing_medium">
+
+    </LinearLayout>
 
 </FrameLayout>
