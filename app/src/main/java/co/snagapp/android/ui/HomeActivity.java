@@ -9,15 +9,11 @@ import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.opengl.Visibility;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,9 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -145,7 +139,6 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
             numbers.add(sms);
         }
         mAdapter.notifyDataSetChanged();
-
         renderEmptyStateIfNeccessary();
     }
 
@@ -255,18 +248,18 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     @Override
     public void onClick(Sms sms) {
         //add sms
-        dataPersister.addNumberToBlockedNumbers(sms.getId());
         numbers.add(sms);
+        dataPersister.addNumberToBlockedNumbers(sms.getId());
         onBackPressed();
     }
 
     @Override
     public void onInputGiven(String number) {
         //add number
-        dataPersister.addNumberToBlockedNumbers(number);
         Sms sms = new Sms();
         sms.setId(number);
         numbers.add(sms);
+        dataPersister.addNumberToBlockedNumbers(number);
         onBackPressed();
     }
 
