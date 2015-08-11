@@ -33,4 +33,5 @@
     <string name="empty_sms">No smses.</string>
     <string name="empty_numbers">No blocked a*holes yet</string>
     <string name="removed">Removed</string>
+    <string name="title_activity_default_sms_app">DefaultSmsAppActivity</string>
 </resources>

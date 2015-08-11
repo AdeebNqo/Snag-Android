@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".Snaggy"
         android:allowBackup="true"
@@ -51,9 +55,15 @@
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5353bc80af7f786a63495398132c9f135b80c576" />
+
+        <activity
+            android:name=".ui.DefaultSmsAppActivity"
+            android:label="@string/title_activity_default_sms_app" >
+        </activity>
     </application>
 
 </manifest>
