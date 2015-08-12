@@ -1,14 +1,12 @@
 package co.snagapp.android.ui;
 
 import co.snagapp.android.R;
+import co.snagapp.android.listeners.MainAdapterWatcher;
 import co.snagapp.android.model.Sms;
 import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
-import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
-import roboguice.activity.RoboActivity;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -19,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class HomeActivity extends RoboActionBarActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
+public class HomeActivity extends RoboActionBarActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener {
 
     private DrawerLayout drawerLayout;
     private ActionBar actionBar;
@@ -58,6 +55,8 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
     private Feedback feedback;
     @Inject
     private DataPersister dataPersister;
+    @Inject
+    MainAdapterWatcher smsAdapterWatcher;
 
 
     @Override
@@ -125,6 +124,9 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
         itemTouchHelper.attachToRecyclerView(spamNumbers);
 
+
+        smsAdapterWatcher.setAdapter(mAdapter);
+
         loadSavedData();
         setupOnClickListeners();
     }
@@ -137,16 +139,6 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
             sms.setId(numIterator.next());
             numbers.add(sms);
         }
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onItemAdded() {
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onItemRemoved() {
         mAdapter.notifyDataSetChanged();
     }
 

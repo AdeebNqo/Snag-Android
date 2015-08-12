@@ -2,6 +2,7 @@ package co.snagapp.android.worker.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class SharedPrerefencesPersister implements DataPersister {
     private String filename = SharedPrerefencesPersister.class.getName();
     private DataPersistenceEventListener dataPersistenceEventListener;
 
+    @Inject
     public SharedPrerefencesPersister(Context context, DataPersistenceEventListener listener){
         sharedPreferences = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         dataPersistenceEventListener = listener;
