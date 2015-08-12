@@ -115,8 +115,8 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
                 //Remove swiped item from list and notify the RecyclerView
                 Toast.makeText(HomeActivity.this, getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
-                dataPersister.removeNumberFromBlockedNumbers(numbers.get(position).getId());
                 numbers.remove(position);
+                dataPersister.removeNumberFromBlockedNumbers(numbers.get(position).getId());
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
