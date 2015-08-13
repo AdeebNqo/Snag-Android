@@ -3,18 +3,14 @@ package co.snagapp.android.ui;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import co.snagapp.android.PicassoImageLoader;
+import co.snagapp.android.worker.impl.PicassoImageLoader;
 import co.snagapp.android.R;
 import co.snagapp.android.worker.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AboutActivity extends ActionBarActivity {
 

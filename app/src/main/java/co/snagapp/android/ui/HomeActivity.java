@@ -1,12 +1,12 @@
 package co.snagapp.android.ui;
 
-import co.snagapp.android.Emailer;
 import co.snagapp.android.R;
-import co.snagapp.android.SharedPrerefencesPersister;
-import co.snagapp.android.Sms;
-import co.snagapp.android.SpamNumbersAdapter;
+import co.snagapp.android.listeners.MainAdapterWatcher;
+import co.snagapp.android.model.Sms;
+import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
+import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -17,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,7 +32,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener, DataPersister.DataPersistenceEventListener {
+import javax.inject.Inject;
+
+public class HomeActivity extends RoboActionBarActivity implements SMSListFragment.SpamNumberDetailsItemOnClickListener, PhoneInputScreen.OnFragmentInteractionListener, View.OnClickListener {
 
     private DrawerLayout drawerLayout;
     private ActionBar actionBar;
@@ -50,11 +51,16 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     private List<Sms> numbers = new ArrayList<>();
     ItemTouchHelper.SimpleCallback listItemSwipeListener;
 
-    private NavigationView navView;
-    private Feedback feedback;
-    private DataPersister dataPersister;
-
     private LinearLayout emptyStateView;
+    private NavigationView navView;
+
+    @Inject
+    private Feedback feedback;
+    @Inject
+    private DataPersister dataPersister;
+    @Inject
+    MainAdapterWatcher smsAdapterWatcher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,16 +121,15 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
                 //Remove swiped item from list and notify the RecyclerView
                 Toast.makeText(HomeActivity.this, getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
-                numbers.remove(position);
                 dataPersister.removeNumberFromBlockedNumbers(numbers.get(position).getId());
+                numbers.remove(position);
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
         itemTouchHelper.attachToRecyclerView(spamNumbers);
 
-        //other items
-        feedback = new Emailer();
-        dataPersister = new SharedPrerefencesPersister(this, this);
+
+        smsAdapterWatcher.setAdapter(mAdapter);
 
         loadSavedData();
         setupOnClickListeners();
@@ -142,21 +147,7 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
         renderEmptyStateIfNeccessary();
     }
 
-    @Override
-    public void onItemAdded() {
-        mAdapter.notifyDataSetChanged();
-
-        renderEmptyStateIfNeccessary();
-    }
-
-    @Override
-    public void onItemRemoved() {
-        mAdapter.notifyDataSetChanged();
-
-        renderEmptyStateIfNeccessary();
-    }
-
-    public void renderEmptyStateIfNeccessary(){
+ public void renderEmptyStateIfNeccessary(){
         if (!numbers.isEmpty()){
             emptyStateView.setVisibility(View.INVISIBLE);
             spamNumbers.setVisibility(View.VISIBLE);
@@ -256,10 +247,10 @@ public class HomeActivity extends AppCompatActivity implements SMSListFragment.S
     @Override
     public void onInputGiven(String number) {
         //add number
+        dataPersister.addNumberToBlockedNumbers(number);
         Sms sms = new Sms();
         sms.setId(number);
         numbers.add(sms);
-        dataPersister.addNumberToBlockedNumbers(number);
         onBackPressed();
     }
 

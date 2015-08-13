@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.model;
 
 /**
  * Created by zola on 2015/07/29.
