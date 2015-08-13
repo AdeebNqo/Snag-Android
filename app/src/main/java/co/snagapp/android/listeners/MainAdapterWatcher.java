@@ -2,8 +2,11 @@ package co.snagapp.android.listeners;
 
 import com.google.inject.Singleton;
 
+import javax.inject.Inject;
+
 import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
+import co.snagapp.android.worker.ViewStateManager;
 
 /**
  * Created on 2015/08/12.
@@ -11,6 +14,8 @@ import co.snagapp.android.worker.DataPersister;
 @Singleton
 public class MainAdapterWatcher implements DataPersister.DataPersistenceEventListener {
 
+    @Inject
+    ViewStateManager viewStateManager;
     private SpamNumbersAdapter mAdapter;
 
     public void setAdapter(SpamNumbersAdapter someAdapter){
@@ -31,5 +36,6 @@ public class MainAdapterWatcher implements DataPersister.DataPersistenceEventLis
         if (mAdapter!=null){
             mAdapter.notifyDataSetChanged();
         }
+        viewStateManager.renderCurrentViewState();
     }
 }

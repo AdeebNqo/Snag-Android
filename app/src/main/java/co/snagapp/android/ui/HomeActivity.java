@@ -2,10 +2,12 @@ package co.snagapp.android.ui;
 
 import co.snagapp.android.R;
 import co.snagapp.android.listeners.MainAdapterWatcher;
+import co.snagapp.android.listeners.ViewStateManagerWithAnimation;
 import co.snagapp.android.model.Sms;
 import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
+import co.snagapp.android.worker.ViewStateManager;
 import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -60,6 +62,8 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
     private DataPersister dataPersister;
     @Inject
     MainAdapterWatcher smsAdapterWatcher;
+    @Inject
+    ViewStateManager viewStateManager;
 
 
     @Override
@@ -128,8 +132,10 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
         itemTouchHelper.attachToRecyclerView(spamNumbers);
 
-
         smsAdapterWatcher.setAdapter(mAdapter);
+
+        viewStateManager.setItems(numbers);
+        viewStateManager.setStates(emptyStateView, spamNumbers);
 
         loadSavedData();
         setupOnClickListeners();
@@ -144,17 +150,12 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
             numbers.add(sms);
         }
         mAdapter.notifyDataSetChanged();
-        renderEmptyStateIfNeccessary();
     }
 
- public void renderEmptyStateIfNeccessary(){
-        if (!numbers.isEmpty()){
-            emptyStateView.setVisibility(View.INVISIBLE);
-            spamNumbers.setVisibility(View.VISIBLE);
-        }else{
-            emptyStateView.setVisibility(View.VISIBLE);
-            spamNumbers.setVisibility(View.INVISIBLE);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewStateManager.renderCurrentViewState();
     }
 
     public void setupOnClickListeners(){
