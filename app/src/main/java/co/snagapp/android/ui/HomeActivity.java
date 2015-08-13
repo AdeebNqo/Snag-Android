@@ -2,7 +2,6 @@ package co.snagapp.android.ui;
 
 import co.snagapp.android.R;
 import co.snagapp.android.listeners.MainAdapterWatcher;
-import co.snagapp.android.listeners.ViewStateManagerWithAnimation;
 import co.snagapp.android.model.Sms;
 import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
@@ -125,8 +124,9 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
                 //Remove swiped item from list and notify the RecyclerView
                 Toast.makeText(HomeActivity.this, getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
-                dataPersister.removeNumberFromBlockedNumbers(numbers.get(position).getId());
+                Sms smsToBeDeleted = numbers.get(position);
                 numbers.remove(position);
+                dataPersister.removeNumberFromBlockedNumbers(smsToBeDeleted.getId());
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(listItemSwipeListener);
@@ -248,10 +248,10 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
     @Override
     public void onInputGiven(String number) {
         //add number
-        dataPersister.addNumberToBlockedNumbers(number);
         Sms sms = new Sms();
         sms.setId(number);
         numbers.add(sms);
+        dataPersister.addNumberToBlockedNumbers(number);
         onBackPressed();
     }
 
