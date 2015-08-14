@@ -5,16 +5,17 @@
     
     <item android:id="@+id/action_feedback"
           android:title="@string/action_feedback"
-        android:icon="@drawable/ic_email_grey600_18dp"
+          android:icon="@drawable/ic_email_grey600_18dp"
           app:showAsAction="never" />
           
-<!--    <item android:id="@+id/action_rate"
-          android:title="@string/action_rate"
-          app:showAsAction="never" />-->
+    <item android:id="@+id/action_sms_settings"
+          android:title="@string/action_sms_settings"
+          android:icon="@drawable/ic_message_processing_grey600_18dp"
+          app:showAsAction="never" />
           
     <item android:id="@+id/action_about"
           android:title="@string/action_about"
-        android:icon="@drawable/ic_information_outline_grey600_18dp"
+          android:icon="@drawable/ic_information_outline_grey600_18dp"
           app:showAsAction="never"/>
     
 </menu>

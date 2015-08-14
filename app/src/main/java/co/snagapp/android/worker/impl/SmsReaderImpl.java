@@ -1,4 +1,4 @@
-package co.snagapp.android;
+package co.snagapp.android.worker.impl;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +8,7 @@ import android.os.Message;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.snagapp.android.model.Sms;
 import co.snagapp.android.worker.SmsReader;
 
 /**
@@ -21,18 +22,16 @@ public class SmsReaderImpl implements SmsReader {
         Uri uriSms = Uri.parse("content://sms");
         Cursor cursor = context.getContentResolver().query(uriSms, null, null, null, null);
 
-        if (cursor != null) {
-            cursor.moveToLast();
-            if (cursor.getCount() > 0) {
-                do {
-                    Sms message = new Sms();
-                    message.setId(cursor.getString(cursor
-                            .getColumnIndex("address")));
-                    message.setMsg(cursor.getString(cursor.getColumnIndex("body")));
-                    lstSms.add(message);
-                } while (cursor.moveToPrevious());
-            }
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            // do what you need with the cursor here
+            Sms message = new Sms();
+            message.setId(cursor.getString(cursor
+                    .getColumnIndex("address")));
+            message.setMsg(cursor.getString(cursor.getColumnIndex("body")));
+            lstSms.add(message);
         }
+        
 
         return lstSms;
     }

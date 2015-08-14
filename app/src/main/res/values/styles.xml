@@ -13,5 +13,13 @@
     <style name="Toolbar" parent="AppTheme">
     </style>
 
+    <style name="textView">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/primary_text</item>
+    </style>
+
+    <style name="textView.Heading">
+        <item name="android:textSize">50sp</item>
+    </style>
 
 </resources>

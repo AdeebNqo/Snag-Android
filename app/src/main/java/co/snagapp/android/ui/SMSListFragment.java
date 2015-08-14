@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import co.snagapp.android.R;
-import co.snagapp.android.Sms;
-import co.snagapp.android.SmsReaderImpl;
-import co.snagapp.android.SpamNumbersAdapter;
+import co.snagapp.android.model.Sms;
+import co.snagapp.android.worker.impl.SmsReaderImpl;
+import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.SmsReader;
 
 public class SMSListFragment extends Fragment implements View.OnClickListener {

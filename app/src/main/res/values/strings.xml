@@ -13,7 +13,7 @@
     <string name="launcher_text_b">Lorem ipsum dolor sit amet, his an audire officiis pertinax, salutandi adversarium mea ut. Ex solet vitae vis, vix everti oportere ei.</string>
     <string name="title_activity_spam_numbers">SpamNumbersActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_sms_settings">Sms Settings</string>
     <string-array name="nav_list">
         <item>text_string</item>
     </string-array>
@@ -34,4 +34,5 @@
     <string name="empty_numbers">No blocked a*holes yet</string>
     <string name="removed">Removed</string>
     <string name="title_activity_default_sms_app">DefaultSmsAppActivity</string>
+    <string name="default_sms_app">Your Preferred SMS App</string>
 </resources>
