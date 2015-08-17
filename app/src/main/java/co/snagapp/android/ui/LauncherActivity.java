@@ -25,14 +25,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class LauncherActivity extends AppCompatActivity {
-	
+
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.viewpager);
 
         String introShown = SettingsUtil.getInstance(this).get(Constants.INTRO_SHOWN);

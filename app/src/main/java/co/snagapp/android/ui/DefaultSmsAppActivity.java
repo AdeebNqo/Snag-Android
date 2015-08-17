@@ -1,55 +1,48 @@
 package co.snagapp.android.ui;
 
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
-import com.google.gson.Gson;
+import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.List;
 
 import co.snagapp.android.R;
+import co.snagapp.android.ui.adapter.DefaultSmsAppAdapter;
 import co.snagapp.android.worker.impl.SmsManager;
 
 public class DefaultSmsAppActivity extends AppCompatActivity {
 
-    private RadioGroup smsAppChoices;
-
+    private StaggeredGridView smsAppChoices;
     private SmsManager smsManager;
+    private LayoutInflater inflater;
+    private List<String> apps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_sms_app);
 
-
-
-        loadViews();
         loadSmsApps();
+        loadViews();
     }
 
     private void loadViews(){
-        smsAppChoices = (RadioGroup) findViewById(R.id.sms_choices);
+        smsAppChoices = (StaggeredGridView) findViewById(R.id.sms_choices);
+        inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        smsAppChoices.setAdapter(new DefaultSmsAppAdapter(this, R.layout.material_radio_button, apps));
     }
 
     private void loadSmsApps(){
         if (smsManager == null){
             smsManager = new SmsManager(this);
         }
-
-        List<String> apps =  smsManager.getAllNamesOfSmsApps();
-        for (String appName : apps){
-
-            RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(appName);
-            smsAppChoices.addView(radioButton);
-        }
+        apps =  smsManager.getAllNamesOfSmsApps();
     }
 
     @Override

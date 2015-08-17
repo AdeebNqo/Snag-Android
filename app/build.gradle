@@ -12,6 +12,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    jcenter()
 }
 
 
@@ -36,6 +37,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile "com.android.support:appcompat-v7:22.2.1"
+    compile 'com.android.support:palette-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.github.clans:fab:1.5.5'
@@ -49,4 +51,5 @@ dependencies {
         transitive = true;
     }
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.etsy.android.grid:library:1.0.5'
 }
