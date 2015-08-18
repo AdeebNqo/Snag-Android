@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import co.snagapp.android.worker.DataPersister;
+import roboguice.RoboGuice;
 
 /**
  * Created on 2015/08/14.
@@ -37,6 +39,8 @@ public class SmsManager {
 
         resolveInfoList = context.getPackageManager()
                 .queryIntentActivities(smsIntent, 0);
+
+        RoboGuice.getInjector(context).injectMembersWithoutViews(this);
     }
 
     public void sendSmsToDefaultApp(Intent intent){
@@ -53,8 +57,17 @@ public class SmsManager {
         context.startActivity(i);
     }
 
-    private ResolveInfo getDefaultApp(){
+    public ResolveInfo getDefaultApp(){
         return dataPersister.getDefaultApp();
+    }
+
+    public String getDefaultAppName(){
+        ResolveInfo resolveInfo = dataPersister.getDefaultApp();
+        if (resolveInfo == null || resolveInfo.activityInfo == null){
+            return "";
+        }else{
+            return resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString();
+        }
     }
 
     public List<ResolveInfo> getAllSmsApps(){
@@ -74,8 +87,18 @@ public class SmsManager {
         for (ResolveInfo resolveInfo : resolveInfoList){
             if (resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString().equalsIgnoreCase(appName)){
                 icon = resolveInfo.loadIcon(packageManager);
+                break;
             }
         }
         return icon;
+    }
+
+    public void saveDefaultApp(String appName){
+        for (ResolveInfo resolveInfo : resolveInfoList){
+            if (resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager).toString().equalsIgnoreCase(appName)){
+                dataPersister.saveDefaultApp(resolveInfo);
+                break;
+            }
+        }
     }
 }

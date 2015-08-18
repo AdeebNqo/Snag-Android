@@ -3,10 +3,7 @@ package co.snagapp.android.worker.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
-import android.util.Log;
-
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;

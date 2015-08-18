@@ -17,18 +17,27 @@ import java.util.List;
 import co.snagapp.android.R;
 import co.snagapp.android.worker.impl.SmsManager;
 
-/**
- * Created on 2015/08/17.
- */
 public class DefaultSmsAppAdapter extends ArrayAdapter<String> {
 
     private SmsManager smsManager;
+    private View selectedView;
+    private String defaultApplicationName;
 
     public DefaultSmsAppAdapter(Context context, int resource, List<String> items) {
         super(context, resource, items);
 
         if (smsManager == null){
             smsManager = new SmsManager(context);
+            defaultApplicationName = smsManager.getDefaultAppName();
+        }
+    }
+
+    public String getSelectedApplication(){
+        if (selectedView!=null){
+            String appName = ((TextView)selectedView.findViewById(R.id.label)).getText().toString();
+            return appName;
+        }else{
+            return "";
         }
     }
 
@@ -40,7 +49,7 @@ public class DefaultSmsAppAdapter extends ArrayAdapter<String> {
         if (v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.material_radio_button, null);
+            v = vi.inflate(R.layout.sms_app_view, null);
         }
 
         String p = getItem(position);
@@ -51,15 +60,34 @@ public class DefaultSmsAppAdapter extends ArrayAdapter<String> {
             TextView label = (TextView) v.findViewById(R.id.label);
 
             label.setText(p);
-            Drawable icon = smsManager.getIcon(p);
+            final Drawable icon = smsManager.getIcon(p);
             img.setImageDrawable(icon);
 
-            // Asynchronous
-            android.support.v7.graphics.Palette palette = android.support.v7.graphics.Palette.from(drawableToBitmap(icon)).generate();
-            if (p != null) {
-                v.setBackgroundColor(palette.getMutedColor(-1));
-            }
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!v.isActivated()){
+                        if (selectedView!=null) {
+                            selectedView.performClick();
+                        }
 
+                        android.support.v7.graphics.Palette palette = android.support.v7.graphics.Palette.from(drawableToBitmap(icon)).generate();
+                        v.setBackgroundColor(palette.getDarkMutedColor(palette.getLightMutedColor(-1)));
+
+                        v.setActivated(true);
+                        selectedView = v;
+                    }else{
+
+                        v.setBackgroundColor(0x00000000);
+                        v.setActivated(false);
+                    }
+                }
+            });
+
+
+            if (defaultApplicationName!=null && defaultApplicationName.equals(p)){
+                v.performClick();
+            }
         }
 
         return v;

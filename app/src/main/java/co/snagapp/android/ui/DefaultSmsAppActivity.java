@@ -1,26 +1,25 @@
 package co.snagapp.android.ui;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.etsy.android.grid.StaggeredGridView;
-
 import java.util.List;
-
 import co.snagapp.android.R;
 import co.snagapp.android.ui.adapter.DefaultSmsAppAdapter;
 import co.snagapp.android.worker.impl.SmsManager;
+import roboguice.activity.RoboActionBarActivity;
 
-public class DefaultSmsAppActivity extends AppCompatActivity {
+public class DefaultSmsAppActivity extends RoboActionBarActivity {
 
     private StaggeredGridView smsAppChoices;
     private SmsManager smsManager;
     private LayoutInflater inflater;
     private List<String> apps;
+    private DefaultSmsAppAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,8 @@ public class DefaultSmsAppActivity extends AppCompatActivity {
         smsAppChoices = (StaggeredGridView) findViewById(R.id.sms_choices);
         inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        smsAppChoices.setAdapter(new DefaultSmsAppAdapter(this, R.layout.material_radio_button, apps));
+        adapter = new DefaultSmsAppAdapter(this, R.layout.sms_app_view, apps);
+        smsAppChoices.setAdapter(adapter);
     }
 
     private void loadSmsApps(){
@@ -55,10 +55,15 @@ public class DefaultSmsAppActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String appName = adapter.getSelectedApplication();
+        if (!TextUtils.isEmpty(appName)){
+            smsManager.saveDefaultApp(adapter.getSelectedApplication());
+        }
     }
 }
