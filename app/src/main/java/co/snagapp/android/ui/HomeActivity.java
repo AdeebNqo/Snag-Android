@@ -8,8 +8,12 @@ import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
 import co.snagapp.android.worker.ViewStateManager;
 import roboguice.activity.RoboActionBarActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
+import android.provider.Telephony;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,10 +26,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
@@ -64,6 +71,8 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
     @Inject
     ViewStateManager viewStateManager;
 
+
+    private AlertDialogWrapper.Builder defaultSmsAppChooser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +148,8 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
 
         loadSavedData();
         setupOnClickListeners();
+
+        showDefaultSmsDialogIfNeccessary();
     }
 
     private void loadSavedData(){
@@ -150,6 +161,33 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
             numbers.add(sms);
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    public boolean showDefaultSmsDialogIfNeccessary(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            final String myPackageName = getPackageName();
+            Log.d("foobar", "pname: "+myPackageName);
+            Log.d("foobar", "default pname: "+Telephony.Sms.getDefaultSmsPackage(this));
+            if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
+                if (defaultSmsAppChooser==null){
+                    defaultSmsAppChooser = new AlertDialogWrapper.Builder(this)
+                            .setTitle(getString(R.string.activate))
+                            .setMessage(getString(R.string.snaggy_is_not_default, getString(R.string.app_name)))
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d("foobar","yes has been clicked!");
+                                    Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                                    intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,myPackageName);
+                                    startActivity(intent);
+                                }
+                            });
+                }
+                defaultSmsAppChooser.show();
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

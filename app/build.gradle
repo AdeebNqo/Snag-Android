@@ -52,4 +52,5 @@ dependencies {
     }
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.etsy.android.grid:library:1.0.5'
+    compile 'com.afollestad:material-dialogs:0.7.8.1'
 }
