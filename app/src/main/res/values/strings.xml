@@ -35,8 +35,10 @@
     <string name="removed">Removed</string>
     <string name="title_activity_default_sms_app">DefaultSmsAppActivity</string>
     <string name="default_sms_app">Your Preferred SMS App</string>
-    <string name="snaggy_is_not_default">%s is not set as the default sms application. Set as default?</string>
-    <string name="activate">Activate</string>
+    <string name="snaggy_is_not_default">%s is not set as the default sms application. In order to function well, it needs to be. Set as default?</string>
+    <string name="activate">Make default</string>
     <string name="yes">YES</string>
     <string name="NO">NO</string>
+    <string name="title_activity_send_to">SendToActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -17,9 +17,6 @@ import javax.inject.Inject;
 import co.snagapp.android.worker.DataPersister;
 import roboguice.RoboGuice;
 
-/**
- * Created on 2015/08/14.
- */
 public class SmsManager {
 
     @Inject
@@ -41,6 +38,25 @@ public class SmsManager {
                 .queryIntentActivities(smsIntent, 0);
 
         RoboGuice.getInjector(context).injectMembersWithoutViews(this);
+    }
+
+    public Intent getIntentToStartApp(ResolveInfo launchable){
+        if (launchable != null) {
+
+            ActivityInfo activity=launchable.activityInfo;
+            ComponentName name=new ComponentName(activity.applicationInfo.packageName,
+                    activity.name);
+
+            Intent i=new Intent(Intent.ACTION_MAIN);
+
+            i.addCategory(Intent.CATEGORY_LAUNCHER);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            i.setComponent(name);
+
+            return i;
+        }
+        return null;
     }
 
     public void sendSmsToDefaultApp(Intent intent){

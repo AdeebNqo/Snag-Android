@@ -7,6 +7,7 @@ import co.snagapp.android.ui.adapter.SpamNumbersAdapter;
 import co.snagapp.android.worker.DataPersister;
 import co.snagapp.android.worker.Feedback;
 import co.snagapp.android.worker.ViewStateManager;
+import co.snagapp.android.worker.impl.SharedPrerefencesPersister;
 import roboguice.activity.RoboActionBarActivity;
 
 import android.content.DialogInterface;
@@ -157,8 +158,11 @@ public class HomeActivity extends RoboActionBarActivity implements SMSListFragme
         Iterator<String> numIterator = blockedNumbers.iterator();
         while(numIterator.hasNext()){
             Sms sms = new Sms();
-            sms.setId(numIterator.next());
-            numbers.add(sms);
+            String id = numIterator.next();
+            if (!id.equalsIgnoreCase(SharedPrerefencesPersister.defaultSMSApp)){
+                sms.setId(id);
+                numbers.add(sms);
+            }
         }
         mAdapter.notifyDataSetChanged();
     }

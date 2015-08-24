@@ -25,7 +25,7 @@ public class SharedPrerefencesPersister implements DataPersister {
 
     private Gson jsonBuilder;
 
-    private String defaultSMSApp = "DEFAULT_SMS_APP";
+    public static String defaultSMSApp = "DEFAULT_SMS_APP";
 
     @Inject
     public SharedPrerefencesPersister(Context context, DataPersistenceEventListener listener){

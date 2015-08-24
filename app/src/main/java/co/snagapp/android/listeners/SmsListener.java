@@ -1,17 +1,28 @@
 package co.snagapp.android.listeners;
 
-import co.snagapp.android.Classifier;
+import co.snagapp.android.worker.DataPersister;
+import co.snagapp.android.worker.impl.SmsManager;
+import roboguice.RoboGuice;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
+import javax.inject.Inject;
 
 public class SmsListener extends BroadcastReceiver {
+    @Inject
+    private DataPersister dataPersister;
+    SmsManager smsManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        RoboGuice.getInjector(context).injectMembersWithoutViews(this);
+
+        if (smsManager==null){
+            smsManager = new SmsManager(context);
+        }
 
         if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
             Bundle bundle = intent.getExtras();
@@ -23,25 +34,20 @@ public class SmsListener extends BroadcastReceiver {
                     Object[] pdus = (Object[]) bundle.get("pdus");
                     msgs = new SmsMessage[pdus.length];
                     for(int i=0; i<msgs.length; i++){
-                        msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
+                        msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                         msgFrom = msgs[i].getOriginatingAddress();
                         msgBody = msgs[i].getMessageBody();
-                    	Log.e("DEBUG", "From: "+msgFrom);
-                    	Log.e("DEBUG", "Body: "+msgBody);
 
-                        // If spam,
-                        Classifier snag = new Classifier(context);
-                        if (snag.isSpam(msgFrom+" "+msgBody)) {
-                        	Log.e("DEBUG", "Is spam");
-                        	abortBroadcast();
-                        	// Add to db
-                        	snag.addSpamSMS(msgFrom, msgBody);
+                        if (dataPersister!=null && !dataPersister.isNumberBlocked(msgFrom)){
+                            //number is not blocked, redirect sms to default sms app
+                            smsManager.sendSmsToDefaultApp(intent);
                         }
                     }
-                } catch(Exception e) {}
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-    	
     }
 
 }
